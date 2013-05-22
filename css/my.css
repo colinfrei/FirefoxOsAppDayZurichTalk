@@ -1,0 +1,19 @@
+dl {
+    text-align: left;
+}
+dt {
+    float: left;
+    text-align: left;
+    width: 250px;
+    font-weight: bold !important;
+}
+
+dd {
+    margin-left: 250px;
+    text-align: left;
+}
+
+.two_column_list li {
+    width: 50%;
+    float: left;
+}
