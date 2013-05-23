@@ -103,12 +103,18 @@
                     <h2>Ambient Light</h2>
 
                     <pre><code data-trim>
-var ambientLight = window.devicelight;
-//TODO: check and complete
+window.ondevicelight = function (event) {
+
+    console.log("Ambient light: " + event.value + " lux");
+
+};
                     </code></pre>
 
+                    <a href="http://www.w3.org/TR/ambient-light/">W3C Specification</a>
+
                     <aside class="notes">
-                        Ambient Light is a w3c working draft. It adds an event on the window object, which gets called with a string stating the ambient light level as one of the values "normal", "dim", "bright".
+                        Ambient Light is a w3c working draft. It adds an event on the window object, which gets called with the lux value the ambient light sensor measured.<br />
+                        This is really straightforward, but allows cool things like allowing you to change the style and the contrast of your site/app based on the ambient light.
                     </aside>
                 </section>
 
@@ -142,19 +148,32 @@ navigator.battery.addEventListener(
                 </section>
 
                 <section>
-                    <h2>Contacts</h2>
+                    <h2>Vibration API</h2>
+
+                    <pre><code data-trim>
+ navigator.vibrate(1000);
+
+ navigator.vibrate([200, 100, 200]);
+                    </code></pre>
+
+                    <a href="http://dev.w3.org/2009/dap/vibration/">W3C Specification</a>
+
+                    <aside class="notes">
+                        This one used to be called <em>WebVibrator</em>, that was changed to <em>Vibration API</em> after all the bad jokes had been made too many times.<br />
+                        The Vibration API is simple as well, it allows you to call a function on the navigator object and either pass it a length it should vibrate (in milliseconds) or an array, where it'll switch between vibrating and not vibrating. So in the bottom example, it'd vibrate for 0.2 seconds, pause for 0.1 seconds and vibrate again for 0.2 seconds.
+                    </aside>
                 </section>
 
                 <section>
-                    <h2>Web Payments</h2>
+                    <h2>TODO: Contacts</h2>
                 </section>
 
                 <section>
-                    TODO: vibrations?
+                    <h2>TODO: Web Payments</h2>
                 </section>
 
                 <section>
-                    TODO: push notifications?
+                    <h2>TODO: push notifications</h2>
                 </section>
 
                 <section>
@@ -434,16 +453,48 @@ navigator.mozSetMessageHandler('activity', function(request) {
                     </code></pre>
 
                     <aside class="notes">
-                        foo
+                        We talked about web activities previously, the configuration for these would go into the manifest file in the activities object.
                     </aside>
                 </section>
 
                 <section>
-                    messages
+                    <h2>Messages</h2>
+
+                    <pre><code data-trim>
+{
+    "name": "Cool App",
+    "description": "This app lets you do really awesome stuff",
+    "messages": [
+        { "telephony-new-call": "/dialer/index.html#keyboard-view" },
+        { "notification": "/dialer/index.html#keyboard-view" },
+        { "alarm": "/facebook/fb_sync.html" }
+    ]
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        I'm not the expert on this, but in general messages allow you to catch system events and react to them. The whole thing is a two step process - you register for the event here in the manifest and also have to register the actual callback function in the JavaScript code.<br />
+                        This can be useful combined with the Alarm API as a 'local notification' system.
+                    </aside>
                 </section>
 
                 <section>
-                    installs_allowed_from
+                    <h2>Market Restrictions</h2>
+
+                    <pre><code data-trim>
+{
+    "name": "Cool App",
+    "description": "This app lets you do really awesome stuff",
+    "installs_allowed_from": [
+        "https://marketplace.firefox.com",
+        "http://colinfrei.com"
+    ]
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        TODO: add notes
+                    </aside>
                 </section>
 
 				<section>
@@ -498,8 +549,17 @@ navigator.mozSetMessageHandler('activity', function(request) {
                 </section>
 
                 <section>
-                    - Same Origin
-                    - Content-Type: application/x-web-app-manifest+json (github)
+                    <h2>Bits & Pieces</h2>
+                    <p class="fragment">Content Type:<br />application/x-web-app-manifest+json</p>
+                    <p class="fragment">Same Origin</p>
+                    <p class="fragment">Absolute Paths</p>
+
+                    <aside class="notes">
+                        So now we've got our manifest put together! Anything else we need to know?<br />
+                        Well one thing is that manifests need to be served with a content-type of 'application/x-web-app-manifest+json', so that they're recognized and parsed. Github does this automatically for files with a <em>.webapp</em> ending, you can output the content type easily on your own server as well.<br />
+                        Then, the manifest file has to be hosted at the same origin as your app. Seems obvious too, but is probably worth mentioning. Also, paths to icons and so on should be absolute.<br />
+                        There are manifest validators available, and there's also a service with an API that allows you to validate manifests if you happen to need something like that.
+                    </aside>
                 </section>
 
 
@@ -562,6 +622,10 @@ navigator.mozSetMessageHandler('activity', function(request) {
                             <li>Fluent in English</li>
                         </ul>
                     </aside>
+                </section>
+
+                <section>
+                    TODO: Open Web Apps stuff<br />https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API
                 </section>
 
                 <section>
