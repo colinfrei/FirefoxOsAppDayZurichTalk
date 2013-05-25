@@ -36,7 +36,7 @@
 			<div class="slides">
 
                 <section>
-                    <h1>So you want to build a "web" app...</h1>
+                    <h1>So you want to build a "web app"<br />...</h1>
                     <aside class="notes">
                         Downsides of web apps: Performance, Functionality/Access to Hardware, Marketing: App/Play-Store
                     </aside>
@@ -214,11 +214,54 @@ navigator.push.unregister(endpointUrl);
                         That will cause the notification to be pushed to the device, which will broadcast a message, and that message can cause other things to happen, like you notifying the user. We'll see how messages are dealt with in more detail later on.
                     </aside>
                 </section>
-<!--
+
                 <section>
-                    <h2>TODO: Web Payments</h2>
+                    <h2>(Local) Notifications</h2>
+
+                    <pre><code data-trim>
+var notification = navigator.mozNotification;
+
+notification.createNotification(
+    "Title",
+    "Notification Text",
+    iconUrl
+);
+                    </code></pre>
                 </section>
--->
+
+                <section>
+                    <h2>Open WebApps</h2>
+
+                    <pre><code data-trim>
+var appInstall = navigator.mozApps.install(manifestUrl);
+
+appInstall.onsuccess = function(data) {
+    // App installed!
+};
+
+appInstall.onerror = function() {
+    console.log("Install failed: " + appInstall.error.name);
+};
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>WebPayment</h2>
+
+                    <pre><code data-trim>
+var payment = navigator.mozPay(JsonWebToken);
+
+payment.onsuccess = function() {
+    // ...
+    // Profit!
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        Payments have a bunch of parts, having to do with authentication, identification, payment processing and so on. It's all specificed in a set of specifications under the name PaySwarm. I haven't played around with it much, but my understanding is that you wrap all the payment information into  a so called Web Token, and the payment itself is simply a call to mozPay(), passing in that token and returning the result.
+                    </aside>
+                </section>
+
                 <section>
                     <h2>More Links</h2>
                     <a href="https://wiki.mozilla.org/WebAPI">Overview of WebAPIs</a><br />
@@ -377,10 +420,6 @@ navigator.mozSetMessageHandler('activity', function(request) {
                         There are a bunch of activities that FirefoxOS offers by default, which you can take advantage of or use as well.<br />
                         Cost control allows you to get the available balance and data/voice usage
                     </aside>
-                </section>
-
-                <section>
-                    <h2>Demo?</h2>
                 </section>
 
                 <section>
