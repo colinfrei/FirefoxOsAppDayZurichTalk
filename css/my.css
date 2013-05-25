@@ -17,3 +17,12 @@ dd {
     width: 50%;
     float: left;
 }
+
+.reveal section img.noborder {
+    border: none;
+    box-shadow: none;
+}
+
+iframe {
+    height: 600px;
+}

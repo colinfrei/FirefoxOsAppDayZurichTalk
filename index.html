@@ -43,7 +43,30 @@
                 </section>
 
                 <section>
-                    Show sections about everything I'm talking about:<br />Web Activities, Manifest, Marketplace
+                    <h2>Me</h2>
+
+                    <img src="images/liip_logo.png" class="noborder" /><br />
+                    <img src="images/mozilla_logo.png" class="noborder" />
+
+                    <aside class="notes">
+                        First a tiny bit about me: I work as a web developer at Liip, coding in PHP and JavaScript. I've been involved with the Mozilla Community for about a year, mostly because I'd heard about FirefoxOS, and I've been playing around with different parts of it ever since.<br />
+                        I'm definitely not an expert on everything I'm going to talk about, but I have spent too much time playing around and reading specs on a bunch of this stuff.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Topics</h2>
+
+                    <ol>
+                        <li>Web APIs</li>
+                        <li>Web Activities</li>
+                        <li>App Manifest</li>
+                        <li>Marketplace</li>
+                    </ol>
+
+                    <aside class="notes">
+                        I want to give you a little insight into four different things: Web APIs, Web Activities, the App Manifest, and Marketplaces for distributing your app. Hopefully that covers everything you need to turn your existing javascript app or site into a full mobile app.
+                    </aside>
                 </section>
 
                 <!--
@@ -165,21 +188,41 @@ navigator.battery.addEventListener(
                 </section>
 
                 <section>
-                    <h2>TODO: Contacts</h2>
-                </section>
+                    <h2>Push Notifications</h2>
 
+                    <pre><code data-trim>
+// Setup Push Notifications
+var reg = navigator.push.register();
+reg.onsuccess = function(e) {
+    var endpointUrl = e.target.result;
+    // save endpointUrl to app server
+}
+
+navigator.mozSetMessageHandler('push', function(m) {
+    var version = m.version;
+    // do something based on version
+});
+
+//Unregister
+navigator.push.unregister(endpointUrl);
+                    </code></pre>
+
+                    <a href="https://wiki.mozilla.org/WebAPI/SimplePush">SimplePush on MDN</a>
+
+                    <aside class="notes">
+                        Push notification require a bit more code, since you need a backend to it, but they're still fairly easy. You simplyregister a pushnotification, and the browser will return an endpointUrl, which is on a third-party server. You send that URL to your backend server, and whenever you want to send a push notification to the device, you can PUT to that endpointURL.<br />
+                        That will cause the notification to be pushed to the device, which will broadcast a message, and that message can cause other things to happen, like you notifying the user. We'll see how messages are dealt with in more detail later on.
+                    </aside>
+                </section>
+<!--
                 <section>
                     <h2>TODO: Web Payments</h2>
                 </section>
-
-                <section>
-                    <h2>TODO: push notifications</h2>
-                </section>
-
+-->
                 <section>
                     <h2>More Links</h2>
                     <a href="https://wiki.mozilla.org/WebAPI">Overview of WebAPIs</a><br />
-                    <a href="https://github.com/robnyman/Firefox-OS-Boilerplate-App/blob/gh-pages/js/webapp.js">Example Code</a><br />
+                    <a href="https://github.com/robnyman/Firefox-OS-Boilerplate-App/blob/gh-pages/js/webapp.js">Boilerplate App (Example Code)</a><br />
                     <a href="https://hacks.mozilla.org/2013/02/using-webapis-to-make-the-web-layer-more-capable/">Web API Blog Post</a>
                 </section>
 
@@ -193,27 +236,24 @@ navigator.battery.addEventListener(
                     <h1>Web Activities</h1>
 
                     <aside class="notes">
-                        Let's make a slight excursion and have a look at web activities.<br />
-                        Web activities allow you to build links between apps. There are two sides to that.
+                        Next up: web activities.<br />
+                        Web activities are similiar to <strong>Web Intents</strong>, they allow you to build links between apps. There are two sides to that.
                     </aside>
                 </section>
 
                 <section>
-                    TODO: add a picture<br />
-                    Use another apps functionality
+                    <h2>Two sides</h2>
+                    <ul>
+                        <li>Use another app's functionality</li>
+                        <li>Offer functionality</li>
+                    </ul>
                     <aside class="notes">
                         One side is when you want to reuse a different apps functionality.<br />
                         Examples might be sharing something, or taking a picture - you want to offer the functionality to the user of the app, but don't want to implement it all yourself, so you call a web activity.<br />
-                        Sharing might offer a selection of Twitter, Facebook or Google Plus, while take a picture will offer you the Camera or the Gallery.
-                    </aside>
-                </section>
-
-                <section>
-                    TODO: add a picture<br />
-                    Offer functionality
-                    <aside class="notes">
+                        Sharing might offer a selection of Twitter, Facebook or Google Plus, while take a picture will offer you the Camera or the Gallery.<br />
                         The other side is if you want to offer functionality from your app, so that other apps can take advantage of it.<br />
                         What you can do is register your app for existing activities, or you can create your own activities. When creating your own activity, it's considered best practice to prefix it with your URL/Domain, to avoid namespace collisions.
+
                     </aside>
                 </section>
 
@@ -232,7 +272,9 @@ var share = new MozActivity({
 share.onsuccess = function() {
     // Do stuff
 };
-share.onerror = function () { // handle error };
+share.onerror = function () {
+    // handle error
+};
                     </code></pre>
                     <aside class="notes">
                         Let's take a closer look at the first scenario first.<br />
@@ -258,7 +300,6 @@ share.onerror = function () { // handle error };
                         The alternative, if our app wants to offer functionality, needs two steps - we need to register the activity and handle it.<br />
                         Registering the app happens in the app manifest, where we add Objects that configure it.<br />
                         <em>pick</em> is the name of the activity in this case, and additionally we define the href, which is the page that should be opened when the activity is called. The <em>disposition</em> has two options, either inline or window<br />
-                        <strong>TODO: see if there's a difference</strong>
                         returnValue is a boolean, stating if the call will return a value or not... TODO: look into in more detail<br />
                         Finally, filters specify what image types this activity should be offered for. This can be easy like in this example, but can also have things like ranges with a minimum and maximum, a pattern, and more.
                     </aside>
@@ -270,12 +311,7 @@ share.onerror = function () { // handle error };
 navigator.mozSetMessageHandler('activity', function(request) {
     var options = request.source;
     if ("pick" === options.name) {
-        //TODO: add code
-
-        if (isOk) {
-            request.postResult();
-            request.postError();
-        }
+        // Do something with the image
     }
 });
                     </code></pre>
@@ -344,9 +380,13 @@ navigator.mozSetMessageHandler('activity', function(request) {
                 </section>
 
                 <section>
+                    <h2>Demo?</h2>
+                </section>
+
+                <section>
                     <h2>More Links</h2>
                     <a href="https://developer.mozilla.org/en-US/docs/WebAPI/Web_Activities">Wiki Documentation</a><br />
-                    <a href="https://github.com/robnyman/Firefox-OS-Boilerplate-App/blob/gh-pages/js/webapp.js">Example Code</a><br />
+                    <a href="https://github.com/robnyman/Firefox-OS-Boilerplate-App/blob/gh-pages/js/webapp.js">Example Code in Boilerplate App</a><br />
                     <a href="https://hacks.mozilla.org/2013/01/introducing-web-activities/">Web Activities Intro Blogpost</a>
                 </section>
 
@@ -497,37 +537,48 @@ navigator.mozSetMessageHandler('activity', function(request) {
                     </aside>
                 </section>
 
-				<section>
-                    <section>
-                        <h2>Permissions</h2>
-                        <pre><code data-trim>
-    {
-        "name": "App Name",
-        "description": "A description of your app",
-        "type": "privileged",
-        "permissions": {
-            "desktop-notification": {
-                "description": "Required to notify about stuff"
-            }
+                <section>
+                    <h2>Permissions</h2>
+                    <pre><code data-trim>
+{
+    "name": "App Name",
+    "description": "A description of your app",
+    "type": "privileged",
+    "permissions": {
+        "desktop-notification": {
+            "description": "Required to notify about stuff"
         }
     }
-                        </code></pre>
+}
+                    </code></pre>
 
-                        <aside class="notes">
-                            types: web / privileged / certified
-                        </aside>
-                    </section>
-				</section>
+                    <aside class="notes">
+                        There are two interesting things here, the type, and the permissions. They're linked, but lets look at them one at a time.
+                    </aside>
+                </section>
 
                 <section>
-                    <h2>Types</h2>
+                    <h2>Permission Types</h2>
                     <div>web</div>
                     <div>privileged</div>
                     <div>certified</div>
 
                     <aside class="notes">
-                        <p>Types are kind of important. There are three different types of apps for Firefox OS: web, privileged and certified. There is also the differentiation, if an app is packaged or not - don't confuse the two, one doesn't mean the other is given.</p>
-                        <p>apps with a type <em>web</em> are the easiest, </p>
+                        <p>Types are important - they basically decide what APIs an app has access to. There are three permission types for Firefox OS: web, privileged and certified.<br />
+                        Web apps have the leat permission, but can be distributed in the easiest way.<br />
+                        Privileged apps have access to some APIs that can be "misused", so the code of these apps is reviewed to make sure it doesn't do anything stupid. One example is the Contacts API, which allows you to read the content of your phonebook.<br />
+                        Certified apps have access to all the APIs, so these are extremely limited. This includes things like being allowed to register to handle phone calls. These apps are reviewed for security, and digitally signed. Most apps that are certified are probably preloaded apps.
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>App Types</h2>
+                    <div>hosted</div>
+                    <div>packaged</div>
+
+                    <aside class="notes">
+                        In addition to permission types there's what I call app types. These differentiate between apps that are hosted on the web and use appcache and stuff to work offline, and apps that are packaged as a zip file and installed directly on the phone.<br />
+                        The important distinction here is between privileged as a permission type and packaged as an app type. I spent about half a day trying to figure out why I didn't have permission to use an API, because I thought packaged automatically meant privileged, which it doesn't.
                     </aside>
                 </section>
 
@@ -542,10 +593,52 @@ navigator.mozSetMessageHandler('activity', function(request) {
                         <li>storage</li>
                         <li>systemXHR</li>
                     </ul>
+                    <p>
+                        <br /><a href="https://developer.mozilla.org/en-US/docs/Web/Apps/App_permissions?redirectlocale=en-US&redirectslug=Apps%2FApp_permissions">Full List</a>
+                    </p>
+
+                    <aside class="notes">
+
+                    </aside>
                 </section>
+
+                <section>
+                    <h2>Permissions</h2>
+                    <pre><code data-trim>
+{
+    "name": "App Name",
+    "description": "A description of your app",
+    "type": "privileged",
+    "permissions": {
+        "contacts": {
+            "description": "Required to match users",
+            "access": "readonly"
+        }
+    }
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        So again, the format for permissions is really easy, just add the permission and a description of what it's used for and you're done. Very few permissions require an additional level, this can be set using the access property.<br />
+                        This can be readonly, readwrite, readcreate or createonly
+                    </aside>
+                </section>
+
+
                 <section>
                     <h2>Versions & Updating</h2>
-                    https://developer.mozilla.org/en-US/docs/Apps/Updating_apps
+                    <pre><code data-trim>
+{
+    "name": "App Name",
+    "description": "A description of your app",
+    "version": "2.0"
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        Updating an app happens differently depending on what kind of app we're dealing with. Web Apps can be updated like normal, using the AppCache updating mechanisms.<br />
+                        Packaged apps can be updated by rebuilding the package and updating the version number in the manifest file.
+                    </aside>
                 </section>
 
                 <section>
@@ -568,7 +661,8 @@ navigator.mozSetMessageHandler('activity', function(request) {
 
                     <a href="http://www.mozilla.org/en-US/styleguide/products/firefoxos/icons/">Firefox OS App Icon Guidelines</a><br />
                     <a href="http://mounir.lamouri.fr/2013/05/the-web-manifest.html">Blog Post about Manifests evolving</a><br />
-                    <a href="http://www.w3.org/2012/sysapps/manifest/">Manifest specification</a>
+                    <a href="http://www.w3.org/2012/sysapps/manifest/">Manifest specification</a><br />
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/App_permissions">App Permissions</a>
                 </section>
 
                 <!--
@@ -624,15 +718,22 @@ navigator.mozSetMessageHandler('activity', function(request) {
                     </aside>
                 </section>
 
+                <!--
                 <section>
                     TODO: Open Web Apps stuff<br />https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API
                 </section>
+-->
 
                 <section>
                     <h2>More Links</h2>
 
                     <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Publishing/Marketplace_review_criteria">Marketplace Review Criteria</a><br />
                     <a href="https://blog.mozilla.org/apps/2013/05/20/become-a-marketplace-app-reviewer/">Blog Post "Become a Marketplace Reviewer"</a>
+                </section>
+
+
+                <section>
+                    <h1>Thanks!</h1>
                 </section>
 			</div>
 
