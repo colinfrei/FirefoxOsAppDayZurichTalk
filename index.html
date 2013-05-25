@@ -344,7 +344,7 @@ share.onerror = function () {
                         The alternative, if our app wants to offer functionality, needs two steps - we need to register the activity and handle it.<br />
                         Registering the app happens in the app manifest, where we add Objects that configure it.<br />
                         <em>pick</em> is the name of the activity in this case, and additionally we define the href, which is the page that should be opened when the activity is called. The <em>disposition</em> has two options, either inline or window<br />
-                        returnValue is a boolean, stating if the call will return a value or not... TODO: look into in more detail<br />
+                        returnValue is a boolean, stating if the call will return a value or not.<br />
                         Finally, filters specify what image types this activity should be offered for. This can be easy like in this example, but can also have things like ranges with a minimum and maximum, a pattern, and more.
                     </aside>
                 </section>
@@ -571,10 +571,6 @@ navigator.mozSetMessageHandler('activity', function(request) {
     ]
 }
                     </code></pre>
-
-                    <aside class="notes">
-                        TODO: add notes
-                    </aside>
                 </section>
 
                 <section>
@@ -757,12 +753,6 @@ navigator.mozSetMessageHandler('activity', function(request) {
                         </ul>
                     </aside>
                 </section>
-
-                <!--
-                <section>
-                    TODO: Open Web Apps stuff<br />https://developer.mozilla.org/en-US/docs/Web/Apps/JavaScript_API
-                </section>
--->
 
                 <section>
                     <h2>More Links</h2>
