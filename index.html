@@ -471,6 +471,7 @@ navigator.mozSetMessageHandler('activity', function(request) {
     },
     "fullscreen": true,
     "orientations": ["portrait","landscape-secondary"],
+    "chrome": { "navigation": true},
     "developer": {
         "name": "Colin Frei",
         "url": "http://colinfrei.com"
@@ -484,10 +485,25 @@ navigator.mozSetMessageHandler('activity', function(request) {
                         Let's expand on that a bit:<br />
                         There's some more not really interesting data in here, including data about you, as well as an icon.<br />
                         You can add a bunch of different icons in different sizes if you want, and for Firefox OS apps there are some guidelines to what icons should look like.<br />
+                        If you want to submit your app to the marketplace you'll need a 128x128 icon
                         There's also a fullscreen flag, which is specific to FirefoxOS, and allows you to say if the app should be launched in fullscreen mode or not.
                         Firefox Marketplace requires the developer name to be included.
                     </aside>
 				</section>
+
+                <section>
+                    <h2>Adding Chrome</h2>
+                    <pre><code data-trim>
+    "chrome": { "navigation": true}
+                </code></pre>
+                    <img src="https://mdn.mozillademos.org/files/5843/nav-both2.png" />
+
+                    <aside class="notes">
+                        The 'chrome' attribute allows you to have a navigation bar appear automatically.<br />
+                        Don't use this. Whenever possible, build a back button into your app directly.
+                    </aside>
+
+                </section>
 
                 <section>
                     <h2>Locales</h2>
