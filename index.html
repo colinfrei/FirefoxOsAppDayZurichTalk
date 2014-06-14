@@ -610,27 +610,37 @@ navigator.mozSetMessageHandler('activity', function(request) {
                 </section>
 
                 <section>
-                    <h2>Permission Types</h2>
-                    <div>web</div>
-                    <div>privileged</div>
-                    <div>certified</div>
+                    <h2>Types</h2>
+
+                    <table cellpadding="10" style="width: 100%">
+                        <tr>
+                            <td></td>
+                            <td>Web</td>
+                            <td>Privileged</td>
+                            <td>Certified</td>
+                        </tr>
+                        <tr>
+                            <td>Hosted</td>
+                            <td>✔</td>
+                            <td>✖</td>
+                            <td>✖</td>
+                        </tr>
+                        <tr>
+                            <td>Packaged</td>
+                            <td>✔</td>
+                            <td>✔</td>
+                            <td>✔</td>
+                        </tr>
+                    </table>
 
                     <aside class="notes">
                         <p>Types are important - they basically decide what APIs an app has access to. There are three permission types for Firefox OS: web, privileged and certified.<br />
                         Web apps have the leat permission, but can be distributed in the easiest way.<br />
                         Privileged apps have access to some APIs that can be "misused", so the code of these apps is reviewed to make sure it doesn't do anything stupid. One example is the Contacts API, which allows you to read the content of your phonebook.<br />
-                        Certified apps have access to all the APIs, so these are extremely limited. This includes things like being allowed to register to handle phone calls. These apps are reviewed for security, and digitally signed. Most apps that are certified are probably preloaded apps.
-                    </aside>
-                </section>
+                        Certified apps have access to all the APIs, so these are extremely limited. This includes things like being allowed to register to handle phone calls. These apps are reviewed for security, and digitally signed. Most apps that are certified are probably preloaded apps.</p>
 
-                <section>
-                    <h2>App Types</h2>
-                    <div>hosted</div>
-                    <div>packaged</div>
-
-                    <aside class="notes">
-                        In addition to permission types there's what I call app types. These differentiate between apps that are hosted on the web and use appcache and stuff to work offline, and apps that are packaged as a zip file and installed directly on the phone.<br />
-                        The important distinction here is between privileged as a permission type and packaged as an app type. I spent about half a day trying to figure out why I didn't have permission to use an API, because I thought packaged automatically meant privileged, which it doesn't.
+                        <p>In addition to permission types there's what I call app types. These differentiate between apps that are hosted on the web and use appcache and stuff to work offline, and apps that are packaged as a zip file and installed directly on the phone.<br />
+                            The important distinction here is between privileged as a permission type and packaged as an app type. I spent about half a day trying to figure out why I didn't have permission to use an API, because I thought packaged automatically meant privileged, which it doesn't.</p>
                     </aside>
                 </section>
 
@@ -713,7 +723,7 @@ navigator.mozSetMessageHandler('activity', function(request) {
 
                     <a href="http://www.mozilla.org/en-US/styleguide/products/firefoxos/icons/">Firefox OS App Icon Guidelines</a><br />
                     <a href="http://mounir.lamouri.fr/2013/05/the-web-manifest.html">Blog Post about Manifests evolving</a><br />
-                    <a href="http://www.w3.org/2012/sysapps/manifest/">Manifest specification</a><br />
+                    <a href="http://www.w3.org/TR/appmanifest/">Manifest specification</a><br />
                     <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/App_permissions">App Permissions</a>
                 </section>
 
